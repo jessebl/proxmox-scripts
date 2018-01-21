@@ -83,14 +83,18 @@ def create_ct(node):
   node.lxc.create(**ct_args)
   print(args.vmid)
 
-if args.list_templates:
-  list_templates()
-elif args.template and args.name:
-  if not args.password:
-    args.password = getpass.getpass(prompt = args.user + ':')
-  api = ProxmoxAPI(args.node, user=args.user,
-      password=args.password, verify_ssl=False)
-  if not args.vmid:
-    args.vmid = api.cluster.nextid.get()
-  node = api.nodes(args.node)
-  create_ct(node)
+def main():
+  if args.list_templates:
+    list_templates()
+  elif args.template and args.name:
+    if not args.password:
+      args.password = getpass.getpass(prompt = args.user + ':')
+    api = ProxmoxAPI(args.node, user=args.user,
+        password=args.password, verify_ssl=False)
+    if not args.vmid:
+      args.vmid = api.cluster.nextid.get()
+    node = api.nodes(args.node)
+    create_ct(node)
+
+if __name__ == '__main__':
+  main()
