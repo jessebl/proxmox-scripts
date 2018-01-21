@@ -3,6 +3,11 @@ import argparse
 from proxmoxer import ProxmoxAPI
 import getpass
 
+"""
+General module for streamlined LXC creation.
+Non-specific to any environment, aside from which options are supported.
+"""
+
 parser = argparse.ArgumentParser(description='Create standard LXC container')
 parser.add_argument('-N', '--node',
     help = 'Proxmox node on which to create the container',
@@ -50,8 +55,8 @@ parser.add_argument('-p', '--password',
 parser.add_argument('-V', '--vmid',
     help = 'Container VMID',
     type = int)
-parser.add_argument('-k', '--keyfile',
-    help = 'public key file for container',
+parser.add_argument('-P', '--pubkey',
+    help = 'public key string for container',
     type = str)
 args = parser.parse_args()
 
@@ -67,13 +72,15 @@ def list_templates():
 
 def create_ct(node):
   """Takes Proxmoxer node object and creates container on it"""
-  node.lxc.create(vmid = args.vmid,
-      ostemplate = available_templates[args.template],
-      hostname = args.name,
-      storage = args.storage,
-      memory = args.memory,
-      cores = args.cores,
-      net0 = args.interface)
+  ct_args = {"vmid": args.vmid,
+      'ostemplate': available_templates[args.template],
+      'hostname': args.name,
+      'storage': args.storage,
+      'memory': args.memory,
+      'cores': args.cores,
+      'net0': args.interface,
+      'ssh-public-keys': args.pubkey}
+  node.lxc.create(**ct_args)
   print(args.vmid)
 
 if args.list_templates:
