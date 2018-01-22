@@ -18,7 +18,7 @@ class LXC:
       }
 
   def __init__(self,
-      hostname = None,
+      hostname,
       node = 'localhost',
       ostemplate_type = 'centos',
       user = 'root@pam',
@@ -73,7 +73,7 @@ def parse_args(parser):
   parser.add_argument('-l', '--list',
       help = 'list ostemplate-types',
       action = 'store_true')
-  parser.add_argument('-H', '--hostname',
+  parser.add_argument('hostname',
       help = 'container hostname',
       type = str)
   parser.add_argument('-n', '--node',
