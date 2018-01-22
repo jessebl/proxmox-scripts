@@ -22,7 +22,7 @@ parser.add_argument('-t',
     help = 'template to user for container',
     type = str,
     default = 'centos')
-parser.add_argument('name',
+parser.add_argument('-n', '--name',
     help = 'hostname for container',
     type = str)
 parser.add_argument('-u', '--user',
