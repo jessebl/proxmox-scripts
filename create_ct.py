@@ -10,13 +10,6 @@ Non-specific to any environment, aside from which options are supported.
 
 class LXC:
 
-  available_templates = {
-      'centos': 'local:vztmpl/centos-7-default_20170504_amd64.tar.xz',
-      'debian': 'local:vztmpl/debian-9.0-standard_9.0-2_amd64.tar.gz',
-      'fedora': 'local:vztmpl/fedora-27-default_20171212_amd64.tar.xz',
-      'ubuntu': 'local:vztmpl/ubuntu-16.04-standard_16.04-1_amd64.tar.gz'
-      }
-
   def __init__(self,
       hostname,
       node = 'localhost',
@@ -29,6 +22,13 @@ class LXC:
       keyfile = None,
       password = None,
       **kwargs):
+    self.available_templates = {
+        'centos': 'local:vztmpl/centos-7-default_20170504_amd64.tar.xz',
+        'debian': 'local:vztmpl/debian-9.0-standard_9.0-2_amd64.tar.gz',
+        'fedora': 'local:vztmpl/fedora-27-default_20171212_amd64.tar.xz',
+        'ubuntu': 'local:vztmpl/ubuntu-16.04-standard_16.04-1_amd64.tar.gz',
+        'opensuse': 'local:vztmpl/opensuse-42.3-default_20171214_amd64.tar.xz'
+        }
     self.hostname = hostname
     self.node = node
     self.ostemplate_type = ostemplate_type
@@ -68,6 +68,9 @@ class LXC:
         'net0': self.interface,
         'ssh-public-keys': self.pubkeys}
     self.api.nodes(self.node).lxc.create(**ct_args)
+
+  def list_templates(self):
+    [print(key) for key in self.available_templates.keys()]
 
 def parse_args(parser):
   parser.add_argument('-l', '--list',
@@ -110,23 +113,16 @@ def parse_args(parser):
   args = parser.parse_args()
   return args
 
-available_templates = {
-  'centos': 'local:vztmpl/centos-7-default_20170504_amd64.tar.xz',
-  'debian': 'local:vztmpl/debian-9.0-standard_9.0-2_amd64.tar.gz',
-  'fedora': 'local:vztmpl/fedora-27-default_20171212_amd64.tar.xz',
-  'ubuntu': 'local:vztmpl/ubuntu-16.04-standard_16.04-1_amd64.tar.gz'
-  }
-
-def list_templates():
-  [print(key) for key in available_templates.keys()]
-
 def main(**kwargs):
   parser = argparse.ArgumentParser(description='Create standard LXC container')
   args = parse_args(parser)
   ct_args = vars(args)
   ct = LXC(**ct_args)
-  ct.create()
-  print(ct.vmid)
+  if args.list:
+    ct.list_templates()
+  else:
+    ct.create()
+    print(ct.vmid)
 
 if __name__ == '__main__':
   main()
