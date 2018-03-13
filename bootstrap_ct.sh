@@ -29,7 +29,7 @@ else >&2 echo "unknown distro; aborting" && exit
 fi
 
 # Install packages
-install="$install_command $ipa_package openssh-server zsh"
+install="$install_command $ipa_package openssh-server zsh sudo"
 install2=$(echo $install)
 pct exec $1 -- $install2
 pct exec $1 -- systemctl start sshd
