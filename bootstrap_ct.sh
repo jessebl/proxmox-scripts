@@ -37,7 +37,7 @@ pct exec $1 -- systemctl start sshd
 # Ansible bootstrap
 ansible_ct_id=108
 pct exec $ansible_ct_id -- \
-	ansible-playbook /root/craptops-ansible/baseline_servers.yml -i "$ip_addr",
+	ansible-playbook /root/ansible-management/upgrade_packages.yml -i "$ip_addr",
 
 # Enroll container in FreeIPA
 pct exec $1 -- ipa-client-install --mkhomedir --enable-dns-updates --principal $kerberos_admin
